@@ -2,6 +2,20 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+
+// /**设置环境变量 */
+const yargs = require("yargs");
+
+// // 解析命令行参数
+const argv = yargs.option("mode").argv;
+
+const env = argv.mode || "production";
+if (env === "development") {
+  process.env = {
+    ...process.env,
+    NODE_ENV: env,
+  };
+}
 const authRoutes = require("./router/auth");
 const routes = require("./router");
 

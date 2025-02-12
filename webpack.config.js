@@ -1,17 +1,12 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
-const dotenv = require("dotenv");
 const webpack = require("webpack");
-
-const env = dotenv.config().parsed;
-
-const envKeys = Object.keys(env).reduce((prev, next) => {
-  prev[`process.env.${next}`] = JSON.stringify(env[next]);
-  return prev;
-}, {});
+const copyWebpackPlugin = require("copy-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
-  entry: "./app.js",
+  mode: "production",
+  entry: ["./app.js"],
   target: "node",
   externals: [nodeExternals()],
   output: {
@@ -32,5 +27,24 @@ module.exports = {
       },
     ],
   },
-  plugins: [new webpack.DefinePlugin(envKeys)],
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify(
+        process.env.NODE_ENV || "production"
+      ),
+    }),
+    new CleanWebpackPlugin(),
+    new copyWebpackPlugin({
+      patterns: [
+        // {
+        //     from: path.resolve(__dirname, "router/routes"),
+        //     to: path.resolve(__dirname, "dist/routes"),
+        //     globOptions: {
+        //       ignore: ["*.js"],//不复制.js以外的文件
+        //     },
+        //   },
+        { from: ".env", to: "." },
+      ],
+    }),
+  ],
 };
