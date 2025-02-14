@@ -5,13 +5,19 @@ const copyWebpackPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
-  mode: "production",
-  entry: ["./app.js"],
+  mode: "development",
+  entry: ["./src/app.js"],
   target: "node",
   externals: [nodeExternals()],
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
+  },
+  resolve: {
+    alias: {
+      // "@": path.resolve(__dirname, "."),
+    },
+    extensions: [".js", "json"],
   },
   module: {
     rules: [

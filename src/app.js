@@ -16,8 +16,11 @@ if (env === "development") {
     NODE_ENV: env,
   };
 }
-const authRoutes = require("./router/auth");
-const routes = require("./router");
+
+console.log("__dirname:", __dirname, require.resolve("@/router/auth"));
+
+const authRoutes = require("@/router/auth");
+const routes = require("@/router");
 
 const app = express();
 const port = process.env.PORT || 3000;
